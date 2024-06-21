@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>悠疗智护</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+            color: #333;
+            background-color: #F5F5DC; /* 米色背景 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        #data {
+            margin: 20px;
+            text-align: center;
+        }
+        .value {
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            margin-top: 30px; /* 增大部分之间的距离 */
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF8C00; /* 暗橙色背景 */
+            color: white; /* 白色文字 */
+        }
+        .input-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px; /* 增大部分之间的距离 */
+        }
+        .input-row span {
+            margin-right: 2px; /* 缩小标题和输入框之间的距离 */
+        }
+        .input-row input {
+            width: 50px;
+            margin-left: 5px; /* 缩小标题和输入框之间的距离 */
+            margin-right: 10px;
+        }
+        .divider {
+            width: 100%;
+            height: 1px;
+            background-color: #00008B; /* 深蓝色 */
+            margin: 8px 0; /* 增大部分之间的距离 */
+        }
+        .title {
+            font-size: 2em; /* 和最上面的“实时数据展示”的大小一样 */
+            text-align: center; /* 居中 */
+        }
+    </style>
+</head>
+<body>
+<h1>实时数据展示</h1>
+<div id="data">
+    <p>温度: <span id="temp" class="value">-</span></p>
+    <p>湿度: <span id="hum" class="value">-</span></p>
+    <p>心率: <span id="heartrate" class="value">-</span></p>
+    <p>血氧饱和度: <span id="spo2" class="value">-</span></p>
+</div>
+<div class="divider"></div> <!-- 添加深蓝色的横线 -->
+<h2 class="title">康复按摩</h2> <!-- 添加“康复按摩”标题 -->
+<div class="input-row">
+    <span>电流强度(左)：</span><input type="number" id="current_strength_left" min="0" max="100"><span>0-100</span>
+</div>
+<div class="input-row">
+    <span>电流强度(右)：</span><input type="number" id="current_strength_right" min="0" max="100"><span>0-100</span>
+</div>
+<div class="input-row">
+    <span>通道1(左)：</span><input type="number" id="channel_left" min="0" max="1"><span>0(关)/1(开)</span>
+    <span>*******</span>
+    <span>通道2(右)：</span><input type="number" id="channel_right" min="0" max="1"><span>0(关)/1(开)</span>
+</div>
+<div class="input-row">
+    <span>模式：</span><input type="number" id="mode" min="0" max="6"><span>0-常规，1-针灸，2-增肌，3-肌肉，4-耐力，5-萎缩，6-康复</span>
+</div>
+<div class="buttons">
+    <button id="send">Send</button>
+    <button id="close">Close</button>
+</div>
+
+<script>
+    var ws = new WebSocket('ws://10.200.101.128:8080//MyWebSocket');
+
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        document.getElementById('temp').textContent = data.items.temp.value;
+        document.getElementById('hum').textContent = data.items.hum.value;
+        document.getElementById('heartrate').textContent = data.items.heartrate.value;
+        document.getElementById('spo2').textContent = data.items.spo2.value;
+    };
+
+    document.getElementById('send').onclick = function() {
+        var message = "{\"params\":{\"WorkMode\":1,\"MassageMode\":" + document.getElementById('mode').value + ",\"current_strength_left\":" + document.getElementById('current_strength_left').value + ",\"current_strength_right\":" + document.getElementById('current_strength_right').value + ",\"channel_left\":" + document.getElementById('channel_left').value + ",\"channel_right\":" + document.getElementById('channel_right').value + "},\"version\":\"1.0.0\"}";
+        ws.send(message);
+    };
+
+    document.getElementById('close').onclick = function() {
+        var message = "{\"params\":{\"WorkMode\":0,\"MassageMode\":0,\"current_strength_left\":0,\"current_strength_right\":0,\"channel_left\":0,\"channel_right\":0},\"version\":\"1.0.0\"}";
+        ws.send(message);
+    };
+</script>
+</body>
+</html>
