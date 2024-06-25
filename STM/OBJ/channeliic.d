@@ -1,0 +1,14 @@
+..\obj\channeliic.o: channeliic.c
+..\obj\channeliic.o: channeliic.h
+..\obj\channeliic.o: ..\SYSTEM\sys\sys.h
+..\obj\channeliic.o: ..\USER\stm32f10x.h
+..\obj\channeliic.o: ..\CORE\core_cm3.h
+..\obj\channeliic.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\channeliic.o: ..\USER\system_stm32f10x.h
+..\obj\channeliic.o: ..\USER\stm32f10x_conf.h
+..\obj\channeliic.o: ..\STM32F10x_FWLib\inc\stm32f10x_gpio.h
+..\obj\channeliic.o: ..\USER\stm32f10x.h
+..\obj\channeliic.o: ..\STM32F10x_FWLib\inc\stm32f10x_rcc.h
+..\obj\channeliic.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
+..\obj\channeliic.o: ..\STM32F10x_FWLib\inc\misc.h
+..\obj\channeliic.o: ..\SYSTEM\delay\delay.h
